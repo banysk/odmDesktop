@@ -165,10 +165,6 @@ def prepare():
     init_globals()
     set_modules()
 
-def get_fq():
-    global fq_f
-    return fq_f.get()
-
 def set_if():
     global input_folder
     input_folder.set(filedialog.askdirectory())
