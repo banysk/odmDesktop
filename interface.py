@@ -20,6 +20,9 @@ s3d_v: StringVar
 fq_f: ttk.Combobox
 start_button: Button
 
+pgb: ttk.Progressbar
+pgv: DoubleVar
+
 # FUNCTIONS
 def init():
     global window
@@ -73,6 +76,8 @@ def set_modules():
     global s3d_v
     global fq_f
     global start_button
+    global pgb
+    global pgv
     # TABS 
     tab_control = ttk.Notebook(window) # container
     tab_main = ttk.Frame(tab_control) # main tab
@@ -103,7 +108,13 @@ def set_modules():
     control_frame.pack()
     start_button = Button(control_frame, text='Start', width=15)
     start_button.grid(row=0, column=0, padx=25, pady=35)
+    
+    pgv = DoubleVar()
 
+    pgb = ttk.Progressbar(control_frame, variable=pgv,
+                          orient=HORIZONTAL, length=400, mode = 'determinate')
+    pgb.grid(row=1, column=0, padx=0, pady=0)
+     
     # SETTINGS TAB
     settings_frame = ttk.Frame(tab_settings, width=400)
     settings_frame.pack()

@@ -6,7 +6,7 @@ import checker
 import os, sys
 sys.path.append('..')
 from pyodm import Node
-
+from threading import Thread
 # CONST
 LEFT = '<Button-1>'
 
@@ -31,8 +31,14 @@ def odm_start(files):
             'skip-3dmodel':iface.s3d_v.get()
         },
     )
-    task.wait_for_completion()
+    task.wait_for_completion(status_callback=progress_bar_callback)
     task.download_assets(iface.output_folder.get())
+
+
+def progress_bar_callback(info):
+    iface.pgv.set(info.progress)
+    print(info.progress)
+    iface.window.update_idletasks()
 
 
 def start_clicked(event):
@@ -43,11 +49,11 @@ def start_clicked(event):
         valid, not_valid = checker.check(files)
         if len(not_valid) != 0:
             messagebox.showwarning('No data', '\n'.join(not_valid))
-        odm_start(valid)
+        thr = Thread(target=odm_start, args=(valid,))
+        thr.start()
 
     except Exception as e:
         messagebox.showerror('Error', str(e))
-
 
 
 # MAIN
